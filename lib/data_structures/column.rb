@@ -278,7 +278,7 @@ module ActiveScaffold::DataStructures
 
     # the table.field name for this column, if applicable
     def field
-      @field ||= [@table, field_name].join('.')
+      @field ||= [@active_record_class.connection.quote_table_name(@table), field_name].join('.')
     end
   end
 end
