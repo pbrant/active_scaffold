@@ -1,5 +1,7 @@
 module ActiveScaffold::Actions
   module Update
+    include ActiveScaffold::CompositeKeys
+
     def self.included(base)
       base.before_filter :update_authorized?, :only => [:edit, :update]
       base.verify :method => [:post, :put],
@@ -66,13 +68,13 @@ module ActiveScaffold::Actions
     # A simple method to find and prepare a record for editing
     # May be overridden to customize the record (set default values, etc.)
     def do_edit
-      @record = find_if_allowed(params[:id], :update)
+      @record = find_if_allowed(unescape_id(params[:id]), :update)
     end
 
     # A complex method to update a record. The complexity comes from the support for subforms, and saving associated records.
     # If you want to customize this algorithm, consider using the +before_update_save+ callback
     def do_update
-      @record = find_if_allowed(params[:id], :update)
+      @record = find_if_allowed(unescape_id(params[:id]), :update)
       begin
         active_scaffold_config.model.transaction do
           @record = update_record_from_params(@record, active_scaffold_config.update.columns, params[:record])
@@ -91,7 +93,7 @@ module ActiveScaffold::Actions
     end
 
     def do_update_column
-      @record = find_if_allowed(params[:id], :update)
+      @record = find_if_allowed(unescape_id(params[:id]), :update)
       if @record.authorized_for?(:action => :update, :column => params[:column])
         @record.update_attributes(params[:column] => params[:value])
       end

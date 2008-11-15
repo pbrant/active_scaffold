@@ -10,6 +10,7 @@ module ActiveScaffold
       include ActiveScaffold::Helpers::ShowColumns
       include ActiveScaffold::Helpers::FormColumns
       include ActiveScaffold::Helpers::SearchColumns
+      include ActiveScaffold::CompositeKeys
 
       ##
       ## Delegates
@@ -162,22 +163,25 @@ module ActiveScaffold
           html_options[:method] = link.method
         end
 
+        link_id = stringify_id(url_options[:id]) || stringify_id(url_options[:parent_id])
+
         html_options[:confirm] = link.confirm if link.confirm?
         html_options[:position] = link.position if link.position and link.inline?
         html_options[:class] += ' action' if link.inline?
         html_options[:popup] = true if link.popup?
-        html_options[:id] = action_link_id(url_options[:action],url_options[:id] || url_options[:parent_id])
+        html_options[:id] = action_link_id(url_options[:action], link_id)
 
         if link.dhtml_confirm?
           html_options[:class] += ' action' if !link.inline?
           html_options[:page_link] = 'true' if !link.inline?
           html_options[:dhtml_confirm] = link.dhtml_confirm.value
-          html_options[:onclick] = link.dhtml_confirm.onclick_function(controller,action_link_id(url_options[:action],url_options[:id] || url_options[:parent_id]))
+          html_options[:onclick] = link.dhtml_confirm.onclick_function(controller,action_link_id(url_options[:action], link_id))
         end
         html_options[:class] += " #{link.html_options[:class]}" unless link.html_options[:class].blank?
 
         # issue 260, use url_options[:link] if it exists. This prevents DB data from being localized.
         label = url_options.delete(:link) || link.label
+        url_options[:id] = escape_id(url_options[:id])
         link_to label, url_options, html_options
       end
 

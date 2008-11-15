@@ -60,13 +60,13 @@ module ActiveScaffold
           end
           return "<a class='disabled'>#{text}</a>" unless record.authorized_for?(:action => column.link.crud_type)
 
-          url_options = params_for(:action => nil, :id => record.id, :link => text)
+          url_options = params_for(:action => nil, :id => escape_id(record.id), :link => text)
           if column.singular_association? and column.link.action != 'nested'
             if associated = record.send(column.association.name)
-              url_options[:id] = associated.id
+              url_options[:id] = escape_id(associated.id)
             elsif link.action == 'new'
               url_options.delete :id
-              url_options[:parent_id] = record.id
+              url_options[:parent_id] = escape_id(record.id)
               url_options[:parent_column] = column.association.reverse
               constraints = {url_options[:parent_column].to_sym => url_options[:parent_id]}
               eid = Digest::MD5.hexdigest(params[:controller] + params[:parent_controller].to_s + constraints.to_s)
@@ -102,9 +102,9 @@ module ActiveScaffold
       def active_scaffold_column_checkbox(column, record)
         column_value = record.send(column.name)
         if column.inplace_edit and record.authorized_for?(:action => :update, :column => column.name)
-          id_options = {:id => record.id.to_s, :action => 'update_column', :name => column.name.to_s}
+          id_options = {:id => escape_id(record.id).to_s, :action => 'update_column', :name => column.name.to_s}
           tag_options = {:tag => "span", :id => element_cell_id(id_options), :class => "in_place_editor_field"}
-          script = remote_function(:url => {:controller => params_for[:controller], :action => "update_column", :column => column.name, :id => record.id.to_s, :value => !column_value, :eid => params[:eid]})
+          script = remote_function(:url => {:controller => params_for[:controller], :action => "update_column", :column => column.name, :id => escape_id(record.id).to_s, :value => !column_value, :eid => params[:eid]})
           content_tag(:span, check_box_tag(tag_options[:id], 1, column_value || column_value == 1, {:onchange => script}) , tag_options)
         else
           check_box_tag(nil, 1, column_value || column_value == 1, :disabled => true)
@@ -168,9 +168,9 @@ module ActiveScaffold
       
       def active_scaffold_inplace_edit(record, column)
         formatted_column = format_inplace_edit_column(record,column)
-        id_options = {:id => record.id.to_s, :action => 'update_column', :name => column.name.to_s}
+        id_options = {:id => escape_id(record.id).to_s, :action => 'update_column', :name => column.name.to_s}
         tag_options = {:tag => "span", :id => element_cell_id(id_options), :class => "in_place_editor_field"}
-        in_place_editor_options = {:url => {:controller => params_for[:controller], :action => "update_column", :column => column.name, :id => record.id.to_s},
+        in_place_editor_options = {:url => {:controller => params_for[:controller], :action => "update_column", :column => column.name, :id => escape_id(record.id).to_s},
          :with => params[:eid] ? "Form.serialize(form) + '&eid=#{params[:eid]}'" : nil,
          :click_to_edit_text => as_("Click to edit"),
          :cancel_text => as_("Cancel"),

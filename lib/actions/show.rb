@@ -1,5 +1,7 @@
 module ActiveScaffold::Actions
   module Show
+    include ActiveScaffold::CompositeKeys
+
     def self.included(base)
       base.before_filter :show_authorized?, :only => :show
     end
@@ -22,7 +24,7 @@ module ActiveScaffold::Actions
     # A simple method to retrieve and prepare a record for showing.
     # May be overridden to customize show routine
     def do_show
-      @record = find_if_allowed(params[:id], :read)
+      @record = find_if_allowed(unescape_id(params[:id]), :read)
     end
 
     # The default security delegates to ActiveRecordPermissions.

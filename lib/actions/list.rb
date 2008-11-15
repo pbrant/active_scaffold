@@ -1,5 +1,7 @@
 module ActiveScaffold::Actions
   module List
+    include ActiveScaffold::CompositeKeys
+
     def self.included(base)
       base.before_filter :list_authorized?, :only => [:index, :table, :update_table, :row, :list]
     end
@@ -26,7 +28,7 @@ module ActiveScaffold::Actions
 
     # get just a single row
     def row
-      render :partial => 'list_record', :locals => {:record => find_if_allowed(params[:id], :read)}
+      render :partial => 'list_record', :locals => {:record => find_if_allowed(unescape_id(params[:id]), :read)}
     end
 
     def list

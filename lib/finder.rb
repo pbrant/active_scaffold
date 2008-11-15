@@ -123,6 +123,8 @@ module ActiveScaffold
     def find_if_allowed(id, action, klass = nil)
       klass ||= active_scaffold_config.model
       record = klass.find(id)
+      puts "id = #{id.class.inspect}, id = #{id.inspect}"
+      puts "record = #{record.class.inspect}, record = #{record.inspect}"
       raise ActiveScaffold::RecordNotAllowed unless record.authorized_for?(:action => action.to_sym)
       return record
     end

@@ -34,6 +34,7 @@ require 'constraints'
 require 'attribute_params'
 require 'active_record_permissions'
 require 'responds_to_parent'
+require 'composite_keys'
 
 ##
 ## Autoloading for some directories

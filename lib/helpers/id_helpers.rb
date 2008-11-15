@@ -47,7 +47,7 @@ module ActiveScaffold
       end
 
       def action_link_id(link_action,link_id)
-        "#{controller_id}-#{link_action}-#{link_id}-link"
+        clean_id "#{controller_id}-#{link_action}-#{link_id}-link"
       end
 
       def active_scaffold_column_header_id(column)
