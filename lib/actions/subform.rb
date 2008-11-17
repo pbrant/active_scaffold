@@ -3,7 +3,6 @@ module ActiveScaffold::Actions
     include ActiveScaffold::CompositeKeys
 
     def edit_associated
-      puts "params = #{params.inspect}"
       @parent_record = params[:id].nil? ? active_scaffold_config.model.new : find_if_allowed(unescape_id(params[:id]), :update)
       @column = active_scaffold_config.columns[params[:association]]
 
