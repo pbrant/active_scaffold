@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), '../test_helper.rb')
 # require 'test/model_stub'
 
-class ActiveScaffold::DataStructures::Column
+ActiveScaffold::DataStructures::Column.class_eval do
   def h(value)
     value
   end
