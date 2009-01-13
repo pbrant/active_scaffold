@@ -10,7 +10,7 @@ end
 
 class ActionColumnsTest < Test::Unit::TestCase
   def setup
-    @columns = ActiveScaffold::DataStructures::ActionColumns.new([:a, :b])
+    @columns = ActiveScaffold::DataStructures::ActionColumns.new(:a, :b)
   end
 
   def test_label
