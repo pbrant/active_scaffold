@@ -10,6 +10,7 @@ module ActiveScaffold
       include ActiveScaffold::Helpers::ShowColumnHelpers
       include ActiveScaffold::Helpers::FormColumnHelpers
       include ActiveScaffold::Helpers::SearchColumnHelpers
+      include ActiveScaffold::CompositeKeys
 
       ##
       ## Delegates
