@@ -157,9 +157,9 @@ module ActiveScaffold::Actions::Nested
             render :action => 'form_messages.rjs', :layout => false
           end
         end
-        type.xml { render :xml => response_object.to_xml, :content_type => Mime::XML, :status => response_status }
-        type.json { render :text => response_object.to_json, :content_type => Mime::JSON, :status => response_status }
-        type.yaml { render :text => response_object.to_yaml, :content_type => Mime::YAML, :status => response_status }
+        type.xml { render :xml => active_scaffold_config.list.columns.res_to_xml(response_object), :content_type => Mime::XML, :status => response_status }
+        type.json { render :text => active_scaffold_config.list.columns.res_to_json(response_object), :content_type => Mime::JSON, :status => response_status }
+        type.yaml { render :text => active_scaffold_config.list.columns.res_to_yaml(response_object), :content_type => Mime::YAML, :status => response_status }
       end
     end
 
@@ -174,9 +174,9 @@ module ActiveScaffold::Actions::Nested
           return_to_main
         end
         type.js { render(:action => 'destroy.rjs', :layout => false) }
-        type.xml { render :xml => successful? ? "" : response_object.to_xml, :content_type => Mime::XML, :status => response_status }
-        type.json { render :text => successful? ? "" : response_object.to_json, :content_type => Mime::JSON, :status => response_status }
-        type.yaml { render :text => successful? ? "" : response_object.to_yaml, :content_type => Mime::YAML, :status => response_status }
+        type.xml { render :xml => successful? ? "" : active_scaffold_config.list.columns.res_to_xml(response_object), :content_type => Mime::XML, :status => response_status }
+        type.json { render :text => successful? ? "" : active_scaffold_config.list.columns.res_to_json(response_object), :content_type => Mime::JSON, :status => response_status }
+        type.yaml { render :text => successful? ? "" : active_scaffold_config.list.columns.res_to_yaml(response_object), :content_type => Mime::YAML, :status => response_status }
       end
     end
     

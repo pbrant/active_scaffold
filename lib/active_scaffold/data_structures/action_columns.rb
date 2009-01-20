@@ -34,6 +34,30 @@ module ActiveScaffold::DataStructures
       return false
     end
 
+    def column_names
+      self.collect {|c| c.name}
+    end
+
+    def res_to_xml(response_object)
+      response_object.to_xml(:only => column_names)
+    end
+
+    def res_to_json(response_object)
+      response_object.to_json(:only => column_names)
+    end
+
+    def res_to_yaml(response_object)
+      yaml_str = "--- \n"
+      names = column_names
+      response_object.each do |r|
+        yaml_str << "- !ruby/object:#{r.class.name} \n"
+        yaml_str << "  attributes: \n"
+        names.each {|n| yaml_str << "    #{n}: #{r[n]}\n"}
+        yaml_str << "\n"
+      end
+      yaml_str
+    end
+
     protected
 
     # called during clone or dup. makes the clone/dup deeper.
