@@ -109,7 +109,16 @@ module ActiveScaffold
         else
         association.table_name
       end
-      condition = constraint_condition_for("#{connection.quote_table_name(table)}.#{connection.quote_column_name(field)}", value)
+      
+      if field.is_a?(Array)
+        pks = []
+        field.each do |f|
+          pks << "#{connection.quote_table_name(table)}.#{connection.quote_column_name(f)} = ?" 
+        end
+        condition = [pks.join(' AND '), value.split(',')].flatten
+      else
+        condition = constraint_condition_for("#{connection.quote_table_name(table)}.#{connection.quote_column_name(field)}", value)
+      end
       if association.options[:polymorphic]
         condition = merge_conditions(
           condition,
