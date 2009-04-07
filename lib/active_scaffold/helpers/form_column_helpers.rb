@@ -6,6 +6,7 @@ module ActiveScaffold
       # It does not do any rendering. It only decides which method is responsible for rendering.
       def active_scaffold_input_for(column, scope = nil)
         options = active_scaffold_input_options(column, scope)
+        options.merge!(column.options)
 
         # first, check if the dev has created an override for this specific field
         if override_form_field?(column)
@@ -150,7 +151,7 @@ module ActiveScaffold
       end
 
       def active_scaffold_input_textarea(column, options)
-        text_area(:record, column.name, options.merge(:cols => column.options[:cols], :rows => column.options[:rows]))
+        text_area(:record, column.name, options)
       end
 
       def active_scaffold_input_usa_state(column, options)
