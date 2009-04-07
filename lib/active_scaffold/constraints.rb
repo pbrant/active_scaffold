@@ -84,6 +84,7 @@ module ActiveScaffold
     # We do NOT want to use .search_sql. If anything, search_sql will refer
     # to a human-searchable value on the associated record.
     def condition_from_association_constraint(association, value)
+      connection = active_scaffold_config.columns.active_record_class.connection
       # when the reverse association is a :belongs_to, the id for the associated object only exists as
       # the primary_key on the other table. so for :has_one and :has_many (when the reverse is :belongs_to),
       # we have to use the other model's primary_key.
@@ -108,8 +109,7 @@ module ActiveScaffold
         else
         association.table_name
       end
-
-      condition = constraint_condition_for("#{table}.#{field}", value)
+      condition = constraint_condition_for("#{connection.quote_table_name(table)}.#{connection.quote_column_name(field)}", value)
       if association.options[:polymorphic]
         condition = merge_conditions(
           condition,
